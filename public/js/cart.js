@@ -112,5 +112,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   await cargarCarrito();
 });
 
-// 🔄 Exportar función global para usar desde otros archivos
+
 window.cargarCarrito = cargarCarrito;

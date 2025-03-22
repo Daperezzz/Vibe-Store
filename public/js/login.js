@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
             throw new Error(data.error || 'Error desconocido');
         }
 
-        // ✅ Redirigir a la URL proporcionada por el backend
+        
         window.location.href = data.redirectUrl;
 
     } catch (error) {

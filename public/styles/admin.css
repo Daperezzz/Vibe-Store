@@ -40,7 +40,7 @@ header nav ul li a:hover {
     transform: scale(1.05);
 }
 
-/* ADMIN PANEL FORM */
+/* PANEL ADMIN PRODUCTO */
 #product-form {
     max-width: 600px;
     margin: 20px auto;
@@ -81,7 +81,7 @@ header nav ul li a:hover {
     background-color: #C4431F;
 }
 
-/* PRODUCT LIST TABLE */
+/* PRODUCOTS TABLA */
 #product-table {
     width: 90%;
     margin: 20px auto;
@@ -131,7 +131,7 @@ header nav ul li a:hover {
     font-weight: bold;
 }
 
-/* 🔐 Modal de clave secreta */
+/* CLAVE MODAL */
 .modal {
   display: none;
   position: fixed;
@@ -201,7 +201,7 @@ header nav ul li a:hover {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Dashboard de estadísticas */
+
 #dashboard {
   background-color: #f9f9f9;
   padding: 20px;

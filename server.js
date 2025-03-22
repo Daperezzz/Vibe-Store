@@ -9,12 +9,12 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = 5000;
 
-// 🔹 Conectar a MongoDB
+
 mongoose.connect('mongodb://localhost:27017/vibe-store')
   .then(() => console.log('✅ Conectado a MongoDB'))
   .catch(err => console.log('❌ Error al conectar a MongoDB:', err));
 
-// 🔹 Middleware
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'vibestore_secret_key',
@@ -25,14 +25,14 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 
-// 🔹 Esquemas de Mongoose
+
 const userSchema = new mongoose.Schema({
     nombre: String,
     direccion: String,
     ciudad: String,
     email: String,
     password: String,
-    role: { type: String, default: 'user' } // Para diferenciar admin y usuarios normales
+    role: { type: String, default: 'user' } 
 });
 const User = mongoose.model('User', userSchema);
 
@@ -42,7 +42,7 @@ const productSchema = new mongoose.Schema({
     size: String,
     description: String,
     imagen: String,
-    stock: Number // Si decides manejar stock
+    stock: Number 
 });
 const Product = mongoose.model('Product', productSchema);
 
@@ -55,7 +55,7 @@ const cartSchema = new mongoose.Schema({
 });
 const Cart = mongoose.model('Cart', cartSchema);
 
-// 🔹 Rutas públicas
+
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 app.get('/productos', (req, res) => res.sendFile(path.join(__dirname, 'views', 'producto.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'views', 'login.html')));
@@ -72,7 +72,7 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'admin.html'));
 });
 
-// 🔹 API - Usuarios
+
 app.post('/api/register', async (req, res) => {
     const { nombre, direccion, ciudad, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -116,7 +116,7 @@ app.get('/api/profile', async (req, res) => {
     }
 });
 
-// 🔹 API - Productos
+
 app.get('/api/products', async (req, res) => {
     try {
         const products = await Product.find();
@@ -126,7 +126,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// 🔹 API - Carrito
+
 app.post('/api/cart/add', async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: 'Debes iniciar sesión' });
 
@@ -168,7 +168,6 @@ app.delete('/api/cart/remove/:productId', async (req, res) => {
     res.status(200).json({ message: 'Producto eliminado del carrito' });
 });
 
-// 🔹 API - Dashboard de estadísticas
 app.get('/api/dashboard', async (req, res) => {
     try {
         const totalProducts = await Product.countDocuments();
@@ -184,7 +183,6 @@ app.get('/api/dashboard', async (req, res) => {
     }
 });
 
-// 🔹 API - Admin
 app.post('/api/admin/products', async (req, res) => {
     const { secretKey, name, price, size, description, imagen, stock } = req.body;
     if (!req.session.userId) return res.status(401).json({ error: 'No autorizado' });
@@ -226,7 +224,6 @@ app.delete('/api/admin/products/:id', async (req, res) => {
     }
 });
 
-// 🔹 Iniciar servidor
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });

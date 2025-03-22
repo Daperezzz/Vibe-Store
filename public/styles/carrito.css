@@ -1,4 +1,4 @@
-/* 🔹 Estilos generales */
+
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f4f4f4;
@@ -9,11 +9,11 @@ body {
 h1 {
   text-align: center;
   font-size: 2rem;
-  color: #FF5733; /* Título llamativo */
+  color: #FF5733; 
   margin-bottom: 20px;
 }
 
-/* 🔹 Contenedor del carrito */
+/* CONTENEDOR DEL CARRITO */
 #carrito-container {
   max-width: 700px;
   margin: 0 auto;
@@ -22,7 +22,7 @@ h1 {
   gap: 15px;
 }
 
-/* 🔹 Producto individual */
+/* PRODUCTO INDIVIDUAL */
 .carrito-item {
   display: flex;
   align-items: center;
@@ -78,7 +78,7 @@ h1 {
   background-color: #e04827;
 }
 
-/* 🔹 Botón eliminar */
+/* ELIMINAR BOTON */
 .eliminar-btn {
   margin-top: 8px;
   background-color: #c0392b;
@@ -95,7 +95,7 @@ h1 {
   background-color: #a93226;
 }
 
-/* 🔹 Acciones del carrito (botones finales) */
+/* 🔹 CARRITO ACCIONESSS */
 .acciones-carrito {
   display: flex;
   justify-content: center;
@@ -137,7 +137,7 @@ h1 {
   transform: scale(1.05);
 }
 
-/* 🔹 Formulario de pago */
+/* FORMULARIO PAGOOO */
 .modal-formulario {
   max-width: 400px;
   margin: 30px auto;
@@ -185,7 +185,7 @@ h1 {
   background-color: #e0482c;
 }
 
-/* 🔹 Boleta */
+/* BOLETAAAA PAGO*/
 .boleta {
   background-color: #fff;
   border: 2px dashed #FF5733;
@@ -204,7 +204,7 @@ h1 {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 🔹 Responsive */
+/* RESPONSIVOOO */
 @media screen and (max-width: 600px) {
   .carrito-item {
     flex-direction: column;
@@ -246,7 +246,7 @@ h1 {
   transition: background-color 0.2s, transform 0.2s;
 }
 
-/* Estilo individual para cada botón */
+/*  BOTONES */
 .btn-volver {
   background-color: #FF5733;
   color: white;

@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         contenedor.appendChild(div);
       });
   
-      // Botones de aumentar y disminuir
+      
       document.querySelectorAll('.increase-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           const id = btn.dataset.id;
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       });
   
-      // Botones de eliminar
+      
       document.querySelectorAll('.eliminar-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
           const id = btn.dataset.id;
@@ -55,13 +55,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       });
   
-      // Mostrar formulario de pago
+      
       document.getElementById('finalizar-compra-btn')?.addEventListener('click', () => {
         document.getElementById('formulario-pago').style.display = 'block';
         window.scrollTo(0, document.body.scrollHeight);
       });
   
-      // Enviar formulario de pago y mostrar boleta
+      
       document.getElementById('pago-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
   
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           return;
         }
   
-        // Crear HTML de boleta
+        
         let boletaHTML = `<h2>📃 Boleta VibeStore</h2><hr>`;
         let total = 0;
   
@@ -88,17 +88,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   
         boletaHTML += `<hr><h3>Total: $${total}</h3><p>Gracias por tu compra 🧡</p>`;
   
-        // Mostrar boleta
+        
         const boletaDiv = document.getElementById('boleta');
         boletaDiv.innerHTML = boletaHTML;
         boletaDiv.style.display = 'block';
   
-        // Borrar carrito desde MongoDB
+        
         for (const item of carrito) {
           await fetch(`/api/cart/remove/${item.productId._id}`, { method: 'DELETE' });
         }
   
-        // Ocultar formulario de pago
+        
         document.getElementById('formulario-pago').style.display = 'none';
       });
   
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
   
-  // Función para actualizar la cantidad de productos
+  
   async function actualizarCantidad(productId, cambio) {
     try {
       const res = await fetch('/api/cart/add', {

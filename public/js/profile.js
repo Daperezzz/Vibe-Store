@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = '/login';
     }
 
-    // 🔹 Cerrar sesión
+    
     document.getElementById('logout-button')?.addEventListener('click', async () => {
         try {
             const res = await fetch('/api/logout', {

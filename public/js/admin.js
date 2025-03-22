@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let modoEdicion = false;
     let productoEditandoId = null;
 
-    // Forzar ingreso de clave cada vez que se entra
+    
     localStorage.removeItem('adminKey');
     document.getElementById('admin-modal').style.display = 'flex';
 
-    // Verificar clave secreta
+    
     document.getElementById('submit-key').addEventListener('click', () => {
         const key = document.getElementById('admin-key').value;
         if (key === 'estofado') {
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Enviar producto o guardar cambios
+    
     document.getElementById('product-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const secretKey = localStorage.getItem('adminKey');
