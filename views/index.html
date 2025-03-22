@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VibeStore - Tienda de Ropa</title>
+  <link rel="stylesheet" href="/styles/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="https://img.freepik.com/vector-premium/contra-signo-simbolo-blanco-negro_679005-151.jpg" alt="VibeStore Logo">
+        <h1>VibeStore</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/">🏠 Inicio</a></li>
+          <li><a href="/productos">🛍️ Productos</a></li>
+          <li><a href="/admin">🔧 Admin</a></li>
+          <li><a href="/login">🔑 Login</a></li>
+        </ul>
+      </nav>
+      <div class="floating-icons">
+        <div class="icon-container" id="user-icon">
+          <a href="/perfil" title="Ver Perfil">
+            <img src="https://static.vecteezy.com/system/resources/previews/007/296/443/non_2x/user-icon-person-icon-client-symbol-profile-icon-vector.jpg" alt="Usuario">
+          </a>
+        </div>
+        <div class="icon-container" id="cart-icon">
+          <a href="/carrito">
+            <img src="https://cdn-icons-png.flaticon.com/512/107/107831.png" alt="Carrito">
+            <span id="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h2>¡La mejor moda solo para ti!</h2>
+        <p>Descubre las últimas tendencias en polerones, zapatillas, jeans y más.</p>
+        <a href="/productos" class="cta-button">Ver Productos</a>
+      </div>
+      <div class="carousel">
+        <div class="carousel-images">
+          <img src="https://i.pinimg.com/736x/e2/37/d7/e237d7cf02124d99860377b51146935e.jpg" alt="Polerón" class="carousel-item">
+          <img src="https://i.pinimg.com/736x/2f/fc/f7/2ffcf786a8b653288879d010191b65f0.jpg" alt="Polera" class="carousel-item">
+          <img src="https://i.pinimg.com/736x/a1/57/e6/a157e6f3e9a73d9b35925e7b2f9cc7dd.jpg" alt="Jeans" class="carousel-item">
+          <img src="https://i.pinimg.com/736x/32/ad/d0/32add06d05698c44a19f416ff3e1f116.jpg" alt="Zapatillas" class="carousel-item">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="logout-modal" class="modal">
+    <div class="modal-content">
+      <h2>¿Quieres cerrar sesión?</h2>
+      <button id="logout-button">Cerrar Sesión</button>
+      <button id="close-modal">Cancelar</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 VibeStore. Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>

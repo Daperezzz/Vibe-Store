@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil - VibeStore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://img.freepik.com/vector-premium/contra-signo-simbolo-blanco-negro_679005-151.jpg" alt="VibeStore Logo">
+                <h1>VibeStore</h1>
+                <p>Perfil del Usuario</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">🏠 Inicio</a></li>
+                    <li><a href="/productos">🛍️ Productos</a></li>
+                    <li><a href="#" id="logout-button">🚪 Cerrar sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="login-container">
+        <h2>👤 Información del Usuario</h2>
+        <div class="profile-container">
+            <p><strong>Nombre:</strong> <span id="name"></span></p>
+            <p><strong>Dirección:</strong> <span id="address"></span></p>
+            <p><strong>Ciudad:</strong> <span id="city"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 VibeStore. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="/js/profile.js"></script>
+</body>
+</html>

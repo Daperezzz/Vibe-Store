@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos - VibeStore</title>
+  <link rel="stylesheet" href="/styles/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="https://img.freepik.com/vector-premium/contra-signo-simbolo-blanco-negro_679005-151.jpg" alt="VibeStore Logo">
+        <h1>VibeStore</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/">🏠 Inicio</a></li>
+          <li><a href="/productos">🛍️ Productos</a></li>
+          <li><a href="/admin">🔧 Admin</a></li>
+          <li><a href="/login">🔑 Login</a></li>
+        </ul>
+      </nav>
+      <div class="floating-icons">
+        <div class="icon-container" id="user-icon">
+          <a href="/perfil" title="Ver Perfil">
+            <img src="https://static.vecteezy.com/system/resources/previews/007/296/443/non_2x/user-icon-person-icon-client-symbol-profile-icon-vector.jpg" alt="Usuario">
+          </a>
+        </div>
+        <div class="icon-container" id="cart-icon">
+          <a href="/carrito">
+            <img src="https://cdn-icons-png.flaticon.com/512/107/107831.png" alt="Carrito">
+            <span id="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="filters">
+    <h2>Filtrar productos</h2>
+    <form id="filter-form">
+      <label for="category">Categoría:</label>
+      <select id="category">
+        <option value="all">Todos</option>
+        <option value="polera">Polera</option>
+        <option value="jeans">Jeans</option>
+        <option value="poleron">Polerón</option>
+        <option value="zapatilla">Zapatilla</option>
+      </select>
+      <label for="size">Tamaño:</label>
+      <select id="size">
+        <option value="all">Todos</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+      </select>
+      <button type="submit">Filtrar</button>
+    </form>
+  </section>
+
+  <section class="product-list">
+    <h2>Productos</h2>
+    <div id="products" class="productos-horizontales"></div>
+  </section>
+
+  <div id="product-detail-modal" class="modal" style="display:none;">
+    <div class="modal-content product-detail">
+      <span id="close-product-detail" style="float:right; cursor:pointer;">❌</span>
+      <img id="detail-image" src="" alt="Producto" style="width: 100%; max-width: 300px; border-radius: 10px;">
+      <h2 id="detail-name"></h2>
+      <p><strong>Precio:</strong> $<span id="detail-price"></span></p>
+      <p><strong>Talla:</strong> <span id="detail-size"></span></p>
+      <p><strong>Descripción:</strong> <span id="detail-description"></span></p>
+      <button id="add-to-cart-btn" data-id="">🛒 Añadir al carrito</button>
+    </div>
+  </div>
+<!-- 🔹 Controles de Paginación -->
+<div id="pagination" class="pagination-controls"></div>
+  <footer>
+    <p>&copy; 2025 VibeStore. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="/js/productos.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/session.js"></script>
+</body>
+</html>
