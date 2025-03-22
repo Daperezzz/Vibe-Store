@@ -210,7 +210,7 @@ app.delete('/api/cart/remove/:productId', async (req, res) => {
   res.status(200).json({ message: 'Producto eliminado del carrito' });
 });
 
-// Dashboard de estadísticas
+
 app.get('/api/dashboard', async (req, res) => {
   try {
     const totalProducts = await Product.countDocuments();
@@ -228,7 +228,7 @@ app.get('/api/dashboard', async (req, res) => {
   }
 });
 
-// Orden + PDF por correo
+
 app.post('/api/order/complete', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'No autenticado' });
 

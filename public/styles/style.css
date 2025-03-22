@@ -14,41 +14,84 @@
     display: block;
   }
   
-  /* HEADER */
+  /* HEADER MEJORADO */
   header {
-    background-color: #FF5733;
-    color: rgb(7, 7, 7);
-    text-align: center;
+    background: linear-gradient(90deg, #FF5733, #FF8D1A);
+    color: white;
     padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   }
   
-  header .logo h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .logo img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .logo h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
   }
   
   header nav ul {
     list-style: none;
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
-    padding: 0;
-  }
-  
-  header nav ul li {
-    margin: 0 20px;
+    gap: 25px;
+    margin-top: 10px;
   }
   
   header nav ul li a {
+    color: white;
+    font-size: 1.1rem;
     text-decoration: none;
-    color: rgb(12, 12, 12);
-    font-size: 1.2rem;
+    position: relative;
+    padding: 8px 0;
     transition: color 0.3s ease;
   }
   
-  header nav ul li a:hover {
-    color: #FFDA79;
+  header nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background-color: white;
+    transition: width 0.3s ease;
+  }
+  
+  header nav ul li a:hover::after {
+    width: 100%;
+  }
+  
+  header nav ul li:last-child a {
+    background-color: white;
+    color: #FF5733;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  header nav ul li:last-child a:hover {
+    background-color: #ffe6d6;
   }
   
   /* HERO */
@@ -310,16 +353,6 @@
     flex: 0 0 auto;
   }
   
-  .logo img {
-    width: 100px;
-    height: auto;
-  }
-  
-  .logo h1 {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-  
   /* MODAL DETALLE PRODUCTO */
   .modal.product-detail {
     display: flex;
@@ -367,7 +400,6 @@
     margin-bottom: 8px;
   }
   
-  /* BOTÓN DE CIERRE */
   #close-product-detail {
     font-size: 22px;
     font-weight: bold;
@@ -440,7 +472,85 @@
     transform: scale(1.05);
   }
   
-  /* ANIMACIÓN DE ENTRADA */
+  /* BENEFICIOS */
+  .benefits {
+    background-color: #fff;
+    padding: 50px 20px;
+    text-align: center;
+  }
+  
+  .benefits h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #FF5733;
+  }
+  
+  .benefits .benefit-list {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .benefit {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    width: 250px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .benefit h3 {
+    color: #FF5733;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .benefit p {
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  /* RESPONSIVE */
+  @media screen and (max-width: 768px) {
+    .header-container {
+      flex-direction: column;
+    }
+  
+    header nav ul {
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+  
+    .product {
+      width: calc(50% - 20px);
+    }
+  
+    .benefits .benefit-list {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .benefit {
+      width: 90%;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .logo h1 {
+      font-size: 2rem;
+    }
+  
+    .product {
+      width: 100%;
+    }
+  
+    .pagination-controls {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  
   @keyframes modalFadeIn {
     0% {
       opacity: 0;
@@ -449,35 +559,6 @@
     100% {
       opacity: 1;
       transform: scale(1);
-    }
-  }
-  
-  /* RESPONSIVO */
-  @media screen and (max-width: 768px) {
-    header .logo h1 {
-      font-size: 2.5rem;
-    }
-    header nav ul li {
-      margin: 0 10px;
-    }
-    .product {
-      width: calc(50% - 20px);
-    }
-  }
-  
-  @media screen and (max-width: 480px) {
-    header .logo h1 {
-      font-size: 2rem;
-    }
-    header nav ul li a {
-      font-size: 1rem;
-    }
-    .product {
-      width: 100%;
-    }
-    .pagination-controls {
-      flex-direction: column;
-      gap: 10px;
     }
   }
   

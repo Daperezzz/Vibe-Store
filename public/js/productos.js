@@ -146,7 +146,7 @@ document.getElementById('filter-form').addEventListener('submit', async (event) 
     console.error('❌ Error al filtrar productos:', error);
   }
 });
-// Cierra el modal al hacer clic fuera del contenido
+
 window.addEventListener('click', (e) => {
   const modal = document.getElementById('product-detail-modal');
   if (e.target === modal) {
