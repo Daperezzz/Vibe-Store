@@ -1,11 +1,18 @@
 let productosTotales = [];
 let paginaActual = 1;
-const productosPorPagina = 5;
+const productosPorPagina = 4;
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const response = await fetch('/api/products');
-    productosTotales = await response.json();
+    const productos = await response.json();
+
+    
+    productosTotales = productos.map(p => ({
+      ...p,
+      categoria: detectarCategoria(p.name) 
+    }));
+
     renderProductos();
     renderPaginacion();
   } catch (error) {
@@ -13,6 +20,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+function detectarCategoria(nombre) {
+  const n = nombre.toLowerCase();
+  if (n.includes("poleron")) return "poleron";
+  if (n.includes("polera")) return "polera";
+  if (n.includes("jeans")) return "jeans";
+  if (n.includes("zapatilla")) return "zapatilla";
+  return "otros";
+}
 
 function renderProductos() {
   const contenedor = document.getElementById('products');
@@ -21,6 +36,11 @@ function renderProductos() {
   const inicio = (paginaActual - 1) * productosPorPagina;
   const fin = inicio + productosPorPagina;
   const productosPagina = productosTotales.slice(inicio, fin);
+
+  if (productosPagina.length === 0) {
+    contenedor.innerHTML = `<p style="text-align:center;">No se encontraron productos.</p>`;
+    return;
+  }
 
   productosPagina.forEach(producto => {
     const div = document.createElement('div');
@@ -45,12 +65,9 @@ function renderProductos() {
   });
 }
 
-
 function renderPaginacion() {
   const totalPaginas = Math.ceil(productosTotales.length / productosPorPagina);
   const contenedor = document.getElementById('pagination');
-  if (!contenedor) return;
-
   contenedor.innerHTML = '';
 
   if (paginaActual > 1) {
@@ -76,7 +93,6 @@ function renderPaginacion() {
   }
 }
 
-
 function showProductDetail(producto) {
   document.getElementById('detail-image').src = producto.imagen;
   document.getElementById('detail-name').textContent = producto.name;
@@ -87,22 +103,16 @@ function showProductDetail(producto) {
   document.getElementById('product-detail-modal').style.display = 'flex';
 }
 
-
 document.getElementById('close-product-detail').addEventListener('click', () => {
   document.getElementById('product-detail-modal').style.display = 'none';
 });
 
-
 document.getElementById('add-to-cart-btn').addEventListener('click', async function () {
   const productId = this.getAttribute('data-id');
-  if (!productId) {
-    console.error('⚠️ productId no definido al intentar añadir al carrito');
-    return alert('Error: producto no válido');
-  }
+  if (!productId) return alert('⚠️ Producto no válido');
   await addToCart(productId, 1);
   document.getElementById('product-detail-modal').style.display = 'none';
 });
-
 
 async function addToCart(productId, quantity) {
   try {
@@ -123,7 +133,6 @@ async function addToCart(productId, quantity) {
   }
 }
 
-
 document.getElementById('filter-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   const categoria = document.getElementById('category').value;
@@ -133,7 +142,10 @@ document.getElementById('filter-form').addEventListener('submit', async (event) 
     const response = await fetch('/api/products');
     const productos = await response.json();
 
-    productosTotales = productos.filter(producto => {
+    productosTotales = productos.map(p => ({
+      ...p,
+      categoria: detectarCategoria(p.name)
+    })).filter(producto => {
       const coincideCategoria = categoria === 'all' || producto.categoria === categoria;
       const coincideTalla = talla === 'all' || producto.size === talla;
       return coincideCategoria && coincideTalla;

@@ -43,7 +43,8 @@ const productSchema = new mongoose.Schema({
   size: String,
   description: String,
   imagen: String,
-  stock: Number
+  stock: Number,
+  category: String
 });
 const Product = mongoose.model('Product', productSchema);
 

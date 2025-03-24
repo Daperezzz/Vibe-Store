@@ -561,4 +561,71 @@
       transform: scale(1);
     }
   }
+  .filters {
+    background-color: #fff;
+    padding: 30px 20px;
+    margin: 30px auto;
+    max-width: 900px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.4s ease;
+    text-align: center;
+  }
+  
+  .filters h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #FF5733;
+  }
+  
+  #filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  #filter-form label {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #444;
+  }
+  
+  #filter-form select,
+  #filter-form button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  #filter-form select:focus {
+    border-color: #FF5733;
+    outline: none;
+  }
+  
+  #filter-form button {
+    background-color: #FF5733;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+  }
+  
+  #filter-form button:hover {
+    background-color: #e04a2d;
+    transform: scale(1.05);
+  }
+  
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   
