@@ -53,52 +53,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    document.getElementById('finalizar-compra-btn')?.addEventListener('click', () => {
-      document.getElementById('formulario-pago').style.display = 'block';
-      window.scrollTo(0, document.body.scrollHeight);
-    });
-
-    document.getElementById('pago-form')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const res = await fetch('/api/cart');
-      const carrito = await res.json();
-
-      if (!carrito.length) {
-        alert("Tu carrito está vacío.");
-        return;
+    // ✅ Botón para redirigir a MercadoPago
+    document.getElementById('btnPagar')?.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/crear-preferencia', { method: 'POST' });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('No se pudo generar el link de pago');
+        }
+      } catch (err) {
+        console.error('Error al conectar con MercadoPago:', err);
+        alert('Hubo un error al procesar el pago');
       }
-
-      const productos = carrito.map(item => ({
-        name: item.productId.name,
-        price: item.productId.price,
-        quantity: item.quantity,
-        size: item.productId.size
-      }));
-
-      const total = productos.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-      const orderRes = await fetch('/api/order/complete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productos, total })
-      });
-
-      const result = await orderRes.json();
-      alert(result.message || 'Orden completada');
-
-      let boletaHTML = `<h2>📃 Boleta VibeStore</h2><hr>`;
-      productos.forEach(p => {
-        boletaHTML += `<p>🧾 <strong>${p.name}</strong> (${p.size}) x${p.quantity} = <strong>$${p.price * p.quantity}</strong></p>`;
-      });
-      boletaHTML += `<hr><h3>Total: $${total}</h3><p>Gracias por tu compra 🧡</p>`;
-
-      const boletaDiv = document.getElementById('boleta');
-      boletaDiv.innerHTML = boletaHTML;
-      boletaDiv.style.display = 'block';
-
-      document.getElementById('formulario-pago').style.display = 'none';
-      location.reload();
     });
 
   } catch (err) {

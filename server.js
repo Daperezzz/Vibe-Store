@@ -6,11 +6,17 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const PDFDocument = require('pdfkit');
 const fs = require('fs');
+const PDFDocument = require('pdfkit');
+const { MercadoPagoConfig, Preference } = require('mercadopago');
 
 const app = express();
-const PORT = 5000;
+const PORT = 5001;
+
+// Configuración MercadoPago
+const mercadopago = new MercadoPagoConfig({
+  accessToken: 'TEST-4044675009086167-062117-80d7c1261caaf08da6493b12aeda4e2b-2065633987'
+});
 
 mongoose.connect('mongodb://localhost:27017/vibe-store')
   .then(() => console.log('✅ Conectado a MongoDB'))
@@ -26,7 +32,7 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 
-// Esquemas y modelos
+// Modelos
 const userSchema = new mongoose.Schema({
   nombre: String,
   direccion: String,
@@ -57,7 +63,7 @@ const cartSchema = new mongoose.Schema({
 });
 const Cart = mongoose.model('Cart', cartSchema);
 
-// Rutas HTML
+// Vistas
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 app.get('/productos', (req, res) => res.sendFile(path.join(__dirname, 'views', 'producto.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'views', 'login.html')));
@@ -70,9 +76,7 @@ app.get('/carrito', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
   res.sendFile(path.join(__dirname, 'views', 'carrito.html'));
 });
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'admin.html'));
-});
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'views', 'admin.html')));
 
 // Registro/Login
 app.post('/api/register', async (req, res) => {
@@ -102,72 +106,43 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.status(200).json({ message: 'Sesión cerrada' });
-  });
+  req.session.destroy(() => res.status(200).json({ message: 'Sesión cerrada' }));
 });
 
 app.get('/api/profile', async (req, res) => {
   if (!req.session.userId) return res.status(401).json({ error: 'No autenticado' });
-  try {
-    const user = await User.findById(req.session.userId).select('-password');
-    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ error: 'Error interno' });
-  }
+  const user = await User.findById(req.session.userId).select('-password');
+  if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+  res.status(200).json(user);
 });
 
 // Productos
 app.get('/api/products', async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.json(products);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+  const products = await Product.find();
+  res.json(products);
 });
 
-// Agregar producto
 app.post('/api/admin/products', async (req, res) => {
   const { secretKey, name, price, size, description, imagen, stock } = req.body;
   if (secretKey !== 'estofado') return res.status(403).json({ error: 'Clave incorrecta' });
-  try {
-    const newProduct = new Product({ name, price, size, description, imagen, stock });
-    await newProduct.save();
-    res.status(201).json({ message: 'Producto agregado correctamente' });
-  } catch (error) {
-    res.status(400).json({ error: 'Error al agregar producto' });
-  }
+  const newProduct = new Product({ name, price, size, description, imagen, stock });
+  await newProduct.save();
+  res.status(201).json({ message: 'Producto agregado correctamente' });
 });
 
-// Editar producto
 app.put('/api/admin/products/:id', async (req, res) => {
   const { secretKey, name, price, size, description, imagen, stock } = req.body;
   if (secretKey !== 'estofado') return res.status(403).json({ error: 'Clave incorrecta' });
-
-  try {
-    const updated = await Product.findByIdAndUpdate(
-      req.params.id,
-      { name, price, size, description, imagen, stock },
-      { new: true }
-    );
-    if (!updated) return res.status(404).json({ error: 'Producto no encontrado' });
-    res.status(200).json({ message: 'Producto actualizado correctamente' });
-  } catch (error) {
-    console.error('❌ Error al actualizar producto:', error);
-    res.status(500).json({ error: 'Error al actualizar' });
-  }
+  const updated = await Product.findByIdAndUpdate(req.params.id, {
+    name, price, size, description, imagen, stock
+  }, { new: true });
+  if (!updated) return res.status(404).json({ error: 'Producto no encontrado' });
+  res.status(200).json({ message: 'Producto actualizado correctamente' });
 });
 
-// Eliminar producto
 app.delete('/api/admin/products/:id', async (req, res) => {
-  try {
-    await Product.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Producto eliminado correctamente' });
-  } catch (error) {
-    res.status(400).json({ error: 'Error al eliminar producto' });
-  }
+  await Product.findByIdAndDelete(req.params.id);
+  res.status(200).json({ message: 'Producto eliminado correctamente' });
 });
 
 // Carrito
@@ -211,50 +186,65 @@ app.delete('/api/cart/remove/:productId', async (req, res) => {
   res.status(200).json({ message: 'Producto eliminado del carrito' });
 });
 
+// Crear preferencia MercadoPago
+app.post('/crear-preferencia', async (req, res) => {
+  if (!req.session.userId) return res.status(401).json({ error: 'Usuario no autenticado' });
 
-app.get('/api/dashboard', async (req, res) => {
-  try {
-    const totalProducts = await Product.countDocuments();
-    const mostExpensive = await Product.findOne().sort({ price: -1 });
-    const cheapest = await Product.findOne().sort({ price: 1 });
+  const cart = await Cart.findOne({ userId: req.session.userId }).populate('products.productId');
+  if (!cart || cart.products.length === 0)
+    return res.status(400).json({ error: 'Carrito vacío' });
 
-    res.status(200).json({
-      totalProducts,
-      mostExpensive,
-      cheapest
-    });
-  } catch (err) {
-    console.error('❌ Error al obtener estadísticas del dashboard:', err);
-    res.status(500).json({ error: 'Error al obtener estadísticas' });
-  }
+  const items = cart.products.map(p => ({
+    title: p.productId.name,
+    unit_price: p.productId.price,
+    quantity: p.quantity
+  }));
+
+  const preference = {
+    items,
+    back_urls: {
+      success: 'http://localhost:5001/success',
+      failure: 'http://localhost:5001/failure',
+      pending: 'http://localhost:5001/pending'
+    }
+  };
+
+  const preferenceInstance = new Preference(mercadopago);
+  const response = await preferenceInstance.create({ body: preference });
+
+  res.json({ url: response.init_point });
 });
 
-
-app.post('/api/order/complete', async (req, res) => {
-  if (!req.session.userId) return res.status(401).json({ error: 'No autenticado' });
-
-  const { productos, total } = req.body;
+// Ruta de éxito con boleta y correo
+app.get('/success', async (req, res) => {
+  if (!req.session.userId) return res.send('⚠️ No autenticado');
 
   try {
     const user = await User.findById(req.session.userId);
-    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+    const cart = await Cart.findOne({ userId: req.session.userId }).populate('products.productId');
+    if (!cart || cart.products.length === 0) return res.send('⚠️ Carrito vacío');
+
+    const productos = cart.products.map(p => ({
+      name: p.productId.name,
+      size: p.productId.size,
+      quantity: p.quantity,
+      price: p.productId.price
+    }));
+
+    const total = productos.reduce((sum, p) => sum + p.price * p.quantity, 0);
 
     const doc = new PDFDocument();
-    const filePath = path.join(__dirname, 'boleta_' + Date.now() + '.pdf');
+    const filePath = path.join(__dirname, `boleta_${Date.now()}.pdf`);
     const stream = fs.createWriteStream(filePath);
     doc.pipe(stream);
 
-    doc.fontSize(18).text('🧾 Boleta de Compra - VibeStore', { align: 'center' });
-    doc.moveDown();
-
+    doc.fontSize(18).text('🧾 Boleta de Compra - VibeStore', { align: 'center' }).moveDown();
     productos.forEach(p => {
       doc.fontSize(12).text(`• ${p.name} (${p.size}) x${p.quantity} = $${p.price * p.quantity}`);
     });
-
     doc.moveDown();
     doc.fontSize(14).text(`Total: $${total}`, { align: 'right' });
     doc.text(`Fecha: ${new Date().toLocaleString()}`, { align: 'right' });
-
     doc.end();
 
     stream.on('finish', async () => {
@@ -267,39 +257,40 @@ app.post('/api/order/complete', async (req, res) => {
         tls: { rejectUnauthorized: false }
       });
 
-      const mailOptions = {
+      await transporter.sendMail({
         from: '"VibeStore" <vibestoreurban@gmail.com>',
         to: user.email,
-        subject: '🧾 Confirmación de tu compra + Boleta PDF',
-        html: `
-          <h2>Gracias por tu compra en VibeStore 🧡</h2>
-          <p>Adjuntamos la boleta de tu compra en formato PDF.</p>
-          <p>¡Esperamos que vuelvas pronto!</p>
-        `,
-        attachments: [
-          {
-            filename: 'boleta.pdf',
-            path: filePath
-          }
-        ]
-      };
+        subject: '🧾 Boleta de tu compra en VibeStore',
+        html: `<h2>¡Gracias por tu compra!</h2><p>Adjuntamos tu boleta en PDF.</p>`,
+        attachments: [{ filename: 'boleta.pdf', path: filePath }]
+      });
 
-      await transporter.sendMail(mailOptions);
+      await Cart.findOneAndUpdate({ userId: req.session.userId }, { products: [] });
 
-      await Cart.findOneAndUpdate(
-        { userId: req.session.userId },
-        { products: [] }
-      );
-
-      res.status(200).json({ message: 'Compra finalizada, correo enviado con PDF' });
+      res.send(`
+        <h2>✅ ¡Pago realizado con éxito!</h2>
+        <p>Te hemos enviado la boleta al correo <strong>${user.email}</strong>.</p>
+        <a href="/productos">← Volver a la tienda</a>
+      `);
 
       setTimeout(() => fs.unlinkSync(filePath), 5000);
     });
 
   } catch (error) {
-    console.error('❌ Error al procesar orden:', error);
-    res.status(500).json({ error: 'Error al procesar la orden' });
+    console.error('❌ Error en /success:', error);
+    res.send('❌ Error al procesar la boleta.');
   }
+});
+
+// Rutas adicionales
+app.get('/failure', (req, res) => res.send('❌ El pago fue rechazado.'));
+app.get('/pending', (req, res) => res.send('⏳ El pago está pendiente.'));
+
+app.get('/api/dashboard', async (req, res) => {
+  const totalProducts = await Product.countDocuments();
+  const mostExpensive = await Product.findOne().sort({ price: -1 });
+  const cheapest = await Product.findOne().sort({ price: 1 });
+  res.status(200).json({ totalProducts, mostExpensive, cheapest });
 });
 
 app.listen(PORT, () => {

@@ -8,28 +8,13 @@
 </head>
 <body>
   <h1>🛒 Mi Carrito</h1>
-  <div id="carrito-container"></div>
-  <div id="formulario-pago" class="modal-formulario" style="display: none;">
-    <h2>💳 Formulario de Pago</h2>
-    <form id="pago-form">
-      <label>Nombre del titular</label>
-      <input type="text" required>
-  
-      <label>Número de tarjeta</label>
-      <input type="text" maxlength="16" required>
-  
-      <label>Fecha de vencimiento</label>
-      <input type="month" required>
-  
-      <label>CVV</label>
-      <input type="text" maxlength="4" required>
-  
-      <button type="submit" class="btn-pagar">Pagar</button>
-    </form>
-  </div>
-  <div id="boleta" class="boleta" style="display:none;"></div>
 
+  <!-- Contenedor de productos del carrito -->
+  <div id="carrito-container"></div>
+
+  <!-- Botones -->
   <a href="/productos" class="btn-volver">← Volver a Productos</a>
-  <button id="finalizar-compra-btn" class="btn-finalizar">Finalizar Compra 💳</button>
+  <button id="btnPagar" class="btn-finalizar">Finalizar Compra 💳</button>
+
 </body>
 </html>
