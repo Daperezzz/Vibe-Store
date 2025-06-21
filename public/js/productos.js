@@ -124,10 +124,23 @@ async function addToCart(productId, quantity) {
 
     const data = await res.json();
     if (res.ok) {
-      alert('✅ Producto añadido al carrito');
-    } else {
-      alert(data.error || '❌ No se pudo agregar al carrito');
-    }
+  Swal.fire({
+    icon: 'success',
+    title: '¡Producto añadido!',
+    text: 'Tu producto se ha añadido al carrito correctamente.',
+    timer: 1800,
+    showConfirmButton: false,
+    toast: true,
+    position: 'top-end',
+    timerProgressBar: true
+  });
+} else {
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: data.error || 'No se pudo agregar al carrito'
+  });
+}
   } catch (err) {
     console.error('❌ Error al añadir al carrito:', err);
   }

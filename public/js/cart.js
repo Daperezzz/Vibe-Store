@@ -82,14 +82,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function actualizarCantidad(productId, cambio) {
     try {
-      await fetch('/api/cart/add', {
+      const res = await fetch('/api/cart/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, quantity: cambio })
       });
-      await cargarCarrito();
+
+      if (res.ok) {
+        await cargarCarrito();
+
+        if (cambio > 0) {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Producto agregado al carrito',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+          });
+        }
+      } else {
+        const data = await res.json();
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.error || 'No se pudo actualizar el carrito'
+        });
+      }
     } catch (err) {
       console.error('❌ Error al actualizar cantidad:', err);
+      Swal.fire('Error', 'No se pudo conectar al servidor', 'error');
     }
   }
 
@@ -111,6 +134,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await cargarCarrito();
 });
-
 
 window.cargarCarrito = cargarCarrito;
