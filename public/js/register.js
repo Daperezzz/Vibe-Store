@@ -9,7 +9,7 @@ document.getElementById('register-form').addEventListener('submit', async (event
     const errorMessage = document.getElementById('register-error-message');
 
     try {
-        const response = await fetch('http://localhost:5000/api/register', {
+        const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
